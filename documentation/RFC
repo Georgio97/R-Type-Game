@@ -1,0 +1,174 @@
+Networking Working Group                                        Georges_r
+Request for Comments: 4242                                      Sabri_o
+Category: Standards Track                                       Lucas.d
+                                                                Gautier.p
+                                                          8k Corporation
+                                                           January 2019
+
+                      RType Protocol (RP) over UDP
+
+Status of This Memo
+
+     This document specifies an Internet protocol for the Rtype project
+     at EPITECH. Distribution of this memo is unlimited.
+
+Copyright Notice
+
+     Copyright (c) 2019 8k Corporation and the persons identified as
+     document authors. All rights reserved.
+
+Georges_r                     Standard Tracks                    [Page 2]
+RFC 2223              RType Communication Protocol         January 2019
+
+
+Table of Contents
+
+     1. Introduction ..................................................2
+          1.1. Conventions Used in This Document ......................2
+     2. Session Management ............................................2
+     3. Message Exchange ..............................................3
+     4. Installasions .................................................4
+     5. Technologies Uses .............................................5
+     6. Game Engine....................................................6
+     7. Abstractions...................................................7
+     8. Authors........................................................8
+
+1.      Introduction
+
+  This document describes how the RType Communication Protocol (RCP) is
+  mapped onto a multiple Client‐Server UDP connection.  UDP is described
+  in [RFC2223].
+
+1.1.    Conventions Used in This Document
+
+  The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+  "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this                    
+  document are to be interpreted as described in [RFC2223].
+
+2.      Session Management
+
+  Mapping the RCP onto the UDP service is straightforward.  First it
+  requires the creation of a UDP connection between two peers, both
+  peers can then communicate.  Since no handshake is required and
+  following the RType project requirements, one peer is identified as
+  the server, the other as the client.
+
+  A server MUST listen for UDP requests on a unused UDP port.  A client
+  MUST connect to a server by specifing the listening port of the
+  server. Once established, the server MUST send a RCP <Login> command
+  to the client to confirm the connection.
+
+  The communication is normally ended by a client issuing an RCP
+  <Logout> command.  A server receiving an RCP <Logout> command MUST end
+  the connection and close the UDP connection.
+
+  A server MAY limit the lifespan of a client.  A client inactive for
+  more than a server‐defined period MAY be closed by the server.
+
+Georges_r                    Standard Tracks                    [Page 3]
+RFC 2223              RType Communication Protocol         January 2019
+
+3.      Message Exchange
+
+  RCP messages are initiated by the server, in the form of commands.
+  A client MUST NOT respond to commands.  A client MUST only
+  send <Input> commands, thus sending the keyboard input to the server.
+  A server SHOULD impose a limit on the amount of time the client as
+  to issue a well‐formed command.  A server SHOULD end the UDP
+  session and close the connection if a well‐formed RCP command is not
+  received within the time limit.
+
+Server
+|        Connect        |
+|>>‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐>>|
+|                       |
+|        Logged         |
+|<<‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐<<|
+|                       |
+|      Choose Room      |
+|<<‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐<<|
+|                       |
+|       Start Game      |
+|<<‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐<<|
+|                       |
+|         Input         |
+|>>‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐>>|
+|                       |
+|       Positions       |
+|<<‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐<<|
+|                       |
+|      Game Ended       |
+|<<‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐<<|
+|                       |
+|        Logout         |
+|>>‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐‐>>|
+            
+  Figure 1: RCP Client‐Server Exchange over UDP
+
+  You can find a link to our project structure plan on Trello :
+  (https://trello.com/c/ZyGX8WTA/6-client)
+
+Georges_r                     Standard Tracks                   [Page 4]
+RFC 2223              RType Communication Protocol         January 2019
+
+4.      Installasions
+
+  Rtype requires [Conan](https://bintray.com/conan/conan-center)
+  to have all the dependencies. The project MUSTbe OS independent.
+  It has to compile and run in a similar manner on Unix system and 
+  Windows systems.It MUST be built using a [CMake] and 
+  dependencies MUST be handled using [conan].
+  Conan should be set to build the requirements using C++11 
+  (see compiler.libcxxc onfig).Your project must also be built 
+  using C++11 at the very least.
+
+Georges_r                     Standard Tracks                   [Page 5]
+RFC 2223              RType Communication Protocol         January 2019
+
+5.      Technologies Uses
+
+  Rtype is currently extended with the following technologies.
+  Instructions on how to use them in your own application are
+  linked below. We use many plugins such as [SFML]
+  (https://www.sfml-dev.org/tutorials/2.5/), Cmake
+  (https://cmake.org/) for software compilation process using
+  simple platform and compiler independent configuration files,
+  and generate native makefiles and workspaces that can be used
+  in the compiler environment of your choice. And Boost library               
+  (https://www.boost.org/).
+
+Georges_r                     Standard Tracks                   [Page 6]
+RFC 2223              RType Communication Protocol         January 2019
+
+  6.      Game Engine
+
+  The game engine is the core foundation of any video game:
+  it determines how you represent an objectig game,
+  (how the coordinate system works, and how the various systems
+  of your game (graphics, physics,network...) to communicate.
+  Our engine will be reviewed and we are focusing on the following
+  points: Runtime extensibility: the ability to add systems to a 
+  game through the form of dynamic libraries,scripts...
+  Compile-time safety: if your engine provides no type-safety at
+  compile-time, using it may lead tocode that’s unclear.
+  Ease of use: when encountering your engine for the first time,
+  how easy is it to create a simple game.
+
+Georges_r                     Standard Tracks                   [Page 7]
+RFC 2223              RType Communication Protocol         January 2019
+
+7.      Abstractions
+
+  Here we have many abstractions such as : Graphical Manager, for
+  SFML graphical library with global functions. Audio Manager,
+  for the sound on the game, meaning we can add all kind of different
+  musics in the client side.
+
+Georges_r                     Standard Tracks                   [Page 8]
+RFC 2223              RType Communication Protocol         January 2019
+
+7.      Authors
+@Georges_r
+@Sabri_o
+@Lucas_d
+@Gautier_p
